@@ -21,7 +21,11 @@ header-includes:
   - \usepackage[normalem]{ulem}
   - \usepackage{makecell}
   - \usepackage{xcolor}
+editor_options: 
+  markdown: 
+    wrap: sentence
 ---
+
 ```{r setup, include = FALSE}
 
 #### Load necessary packages ####
@@ -40,34 +44,71 @@ library(geosphere)
 ```
 
 ## Background
-The World Health Organization has recently employed a new data science initiative, *CSIT-165*, that uses data science to characterize pandemic diseases. 
+
+The World Health Organization has recently employed a new data science initiative, *CSIT-165*, that uses data science to characterize pandemic diseases.
 *CSIT-165* disseminates data driven analyses to global decision makers.
 
-*CSIT-165* is a conglomerate comprised of two fabricated entities: *Global Health Union (GHU)* and *Private Diagnostic Laboratories (PDL)*. 
+*CSIT-165* is a conglomerate comprised of two fabricated entities: *Global Health Union (GHU)* and *Private Diagnostic Laboratories (PDL)*.
 Your and your partner's role is to play a data scientist from one of these two entities.
 
 ## Data
+
 > [2019 Novel Coronavirus COVID-19 (2019-nCoV) Data Repository by John Hopkins CSSE](https://github.com/CSSEGISandData/COVID-19/tree/master/csse_covid_19_data/csse_covid_19_time_series)
 
 Data for 2019 Novel Coronavirus is operated by the John Hopkins University Center for Systems Science and Engineering (JHU CSSE).
-Data includes daily time series CSV summary tables, including confirmations, recoveries, and deaths. 
+Data includes daily time series CSV summary tables, including confirmations, recoveries, and deaths.
 Country/region are countries/regions hat conform to World Health Organization (WHO).
-Lat and Long refer to coordinates references for the user. 
+Lat and Long refer to coordinates references for the user.
 Date fields are stored in MM/DD/YYYY format.
 
 ## Project Objectives
 
 ### Objective 1
+
 ```{r ob1}
+#stores the urls of the two data sets used in this objective 
+time_series_covid19_confirmed_global <- ("time_series_covid19_confirmed_global.csv")
+time_series_covid19_deaths_global <- ("time_series_covid19_deaths_global.csv")
+#reads the two urls into variables and these csv's are stored as data frames
+confirmedData <- read.csv(file=time_series_covid19_confirmed_global, header = TRUE)
+deathData <- read.csv(file=time_series_covid19_deaths_global, header = TRUE)
+#largest index stores the index of the country with the most deaths and confirmations on the first recorded day 
+largestIndex <- 1
+#scores the largest number of deaths and confirmations on the first day 
+largestNumber <- 0
+#Stores the current sum total of deaths and confirmations as we loop through the data sets. 
+currentSum <- 0
+#constant that stores the index of the first recorded day in the data set. 
+INDEXOFFIRSTDAY <- 5
+
+#for loop goes through every row of the data sets (since both data sets have the same dimension we can use nrow on either or)
+for(i in 1:nrow(confirmedData)){
+  #calculates the combined deaths and confirmations on the first day of the current row
+  currentSum = (confirmedData[i,INDEXOFFIRSTDAY]) + (deathData[i,INDEXOFFIRSTDAY])
+  #checks if the currentSum is larger than the previously found largest number 
+  if((currentSum > largestNumber)){
+    #sets the index of the largest number
+    largestIndex = i
+    #Sets the largest number as the currentSum for the next loop 
+    largestNumber = currentSum
+    
+  }
+  #resets the currentSum so that the loop can begin anew
+  currentSum = 0
+
+}
+print(confirmedData[largestIndex,2])
 
 ```
 
 ### Objective 2
+
 ```{r ob2}
 
 ```
 
 ### Objective 3
+
 ```{r ob3}
 
 ```
@@ -75,21 +116,19 @@ Date fields are stored in MM/DD/YYYY format.
 ### Objective 4
 
 #### Objective 4.1
+
 ```{r ob4.1}
 
 ```
 
 #### Objective 4.2
+
 ```{r ob4.2}
 
 ```
 
 ### GitHub Log
-```{bash gitlog} 
+
+```{bash gitlog}
 git log --pretty=format:"%nSubject: %s%nAuthor: %aN%nDate: %aD%nBody: %b"
 ```
-
-
-
-
-
