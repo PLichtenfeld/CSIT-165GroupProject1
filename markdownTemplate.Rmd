@@ -104,18 +104,16 @@ print(confirmedData[largestIndex,2])
 ### Objective 2
 The most recent area to have a first confirmed case
 ```{r ob2}
+#What if we wanted to find the most recent area to have a first confirmed COVID 19 case?
 #stores the urls of the one data set used in this objective 
 time_series_covid19_confirmed_global <- ("time_series_covid19_confirmed_global.csv")
 #for loop goes through every row of the data set of confirmed global cases of COVID 19
-for(i in 1:nrow(confirmedData)){
-  if(INDEXOFFIRSTDAY < 0)
-
 ```
 
 ### Objective 3
-
+The areas from objective 2 from where the first confirmed case(s) occurred are __ miles away.
 ```{r ob3}
-
+distm()
 ```
 
 ### Objective 4
