@@ -114,18 +114,96 @@ print(confirmedData[largestIndex,2])
 ```
 
 ### Objective 4
-
-#### Objective 4.1
+This objective was about calculating risk scores. The first challenge of this objective was to filter out all cruise ships from the data set. Since cruise ships had either 0 or NA for their coordinate positions I could use that to identify which rows they were. I looped through the data sets and found every entry which had 0 or NA for coordinate positions and created new data frames without those rows. The next part of the problem was to calculate the risk scores of the data. To do so I looped through the data frames, found the largest number in the deaths and confirmation data frames, divided deaths by confirmations and then multiplied the result by 100. I found the largest number in the data frame because the data set calculates the total number of confirmations/deaths to that region day by day rather than by the number of new cases every single day. If it were new cases every single day then you would use the sum() function in order to sum up all new cases day by day. The next part of the problem was to present which areas had the lowest and highest risk scores, the only difficult part about that is what should be done if there's a tie. The instructions say to output the area with the highest confirmations if there is a tie. To do this I first dynamically set the lowest and highest risk score that we had. Then in a for loop I went through and checked the confirmation counts of all fields that shared the lowest/highest risk score, and whoever's confirmation was higher would be the one to be printed. 
 
 ```{r ob4.1}
+#stores the urls of the two data sets used in this objective 
+time_series_covid19_confirmed_global <- ("time_series_covid19_confirmed_global.csv")
+time_series_covid19_deaths_global <- ("time_series_covid19_deaths_global.csv")
+#reads the two urls into variables and these csv's are stored as data frames
+confirmedData <- read.csv(file=time_series_covid19_confirmed_global, header = TRUE)
+deathData <- read.csv(file=time_series_covid19_deaths_global, header = TRUE)
+#creates an empty vector to hold the indexes of cruise ship covid cases 
+cruiseShipIndexes <- c()
+#for loop that iterates through every row of the data (death data set and confirmed data set are of the same length)
+for(i in 1:nrow(deathData)){
+  #also if one data set holds a cruise ship then the other will have that cruise ship on the same row 
+  #if latitude and longitude are NA then it stores the index of that row into a vector
+  if(is.na(deathData[i,3])&&is.na(deathData[i,4])){
+    cruiseShipIndexes <- c(cruiseShipIndexes, i)
+    #checks if latitude and longitude are 0 then stores index of that row into a vector
+  }else if(deathData[i,3] == 0 && deathData[i, 4] == 0){
+    cruiseShipIndexes <- c(cruiseShipIndexes, i)
+    
+  }
+}
+#creates a new data frame that is every row of the confirmed data set minus the rows that are cruise ships 
+confirmedCasesSansCruise <- confirmedData[-c(cruiseShipIndexes),]
+confirmedCasesSansCruise <- confirmedCasesSansCruise[,-c(3:4)]
+#creates a new data frame that is every row of the death data set minus the cruise ships row 
+deathCasesSansCruise <- deathData[-c(cruiseShipIndexes),]
+deathCasesSansCruise <- deathCasesSansCruise[,-c(3:4)]
+#creates a vector with a preallocated size for efficiency 
+riskScore <- vector("numeric", nrow(deathCasesSansCruise))
+COLUMN_COUNT <- ncol(confirmedCasesSansCruise)
+for(y in 1:nrow(deathCasesSansCruise)){
+  #assigns riskScore the risk score of every country through this for loop 
+  riskScore[y] <- (100*(max(deathCasesSansCruise[y,4:COLUMN_COUNT]))/(max(confirmedCasesSansCruise[y,4:COLUMN_COUNT])))
+  
+}
+
+
+
+#Table that stores every region, country, and their risk score
+riskScoreTable <- data.frame(deathCasesSansCruise$Province.State,deathCasesSansCruise$Country.Region,riskScore)
+#orders the table in order of risk score descending, also omits NaN and NA
+lowestRiskScore <- na.omit(riskScoreTable[order(riskScoreTable$riskScore),])
+#dynamically calculates the lowest risk score we have in the event of a tie for lowest risk score
+lowestScoreWeHave <- (min(lowestRiskScore[,3]))
+#dynamically calculates the highest risk score we have in the event of a tie for highest risk score 
+highestScoreWeHave <- (max(lowestRiskScore[,3]))
+#holds the index of the area with the lowest risk score 
+lowestRiskScoreAreaIndex <- 0
+#stores the number of confirmed cases for the lowest risk score 
+lowest <- 0 
+#stores the index of the current iteration of the loop 
+indexOfCurrentTest <- 0 
+#stores the index of the lowest risk score taking into account highest confirmed cases 
+indexOfLowestRiskScore <- 0 
+#stores the index of the highest risk score 
+indexOfHighestRiskScore <- 0 
+#stores the current highest risk score 
+highestSeenRiskScore <- 0
+#for loop that goes through every row in the sorted risk score data frame
+for(x in 1:nrow(riskScoreTable)){
+  #sets the index of the current test by getting the row name of the ordered list 
+  #there's assuredly a better way to do this but I tried to change it and then it didn't work anymore
+  indexOfCurrentTest <- rownames(lowestRiskScore[x,])
+  #if the number of confirmed cases is higher than previously recorded and the risk score is 0(the lowest number the data set has)
+  if(max(confirmedCasesSansCruise[x,4:COLUMN_COUNT]) > lowest && lowestRiskScore[x,3] == lowestScoreWeHave){
+    #sets the lowest to the next value 
+    lowest <- max(confirmedCasesSansCruise[x,4:COLUMN_COUNT])
+    #sets the index to the current index of our test 
+    indexOfLowestRiskScore <- indexOfCurrentTest
+    #this part does the above section but for the highest risk score not the lowest 
+  }else if(isTRUE(riskScoreTable[x,3] > highestSeenRiskScore)&& riskScoreTable[x,3] == highestScoreWeHave){
+    #sets the index of the highest score 
+    indexOfHighestRiskScore <- x 
+    #Sets the highest seen confirmation of same risk score areas 
+    highestSeenRiskScore <- riskScoreTable[x,3]
+    #sets the highest number of confirmations to thenew value 
+    highestConfirmed <- max(confirmedCasesSansCruise[x,4:COLUMN_COUNT])
+  }
+}
+
+paste("The area with the lowest risk score is:")
+print(riskScoreTable[indexOfLowestRiskScore,])
+print(riskScoreTable[indexOfHighestRiskScore,])
+
 
 ```
+The current region with the lowest risk score is the Summer Olympic games of 2020 with a 0 and the current highest risk score is North Korea with a value of 600. These scores are important to calculate because they represent how different areas are equipped to deal with COVID-19. Which countries are struggling, which are doing well. The difference in scores can have to do with how equipped different nations are at handling pandemics. It also shows how effective different medical and lockdown procedures affect risk scores as time goes on. These risk scores do have several flaws however. The biggest one being that incomplete or impossible data skews the results an insane amount. For example North Korea has a risk score that should not be physically possible. Also the lowest risk score that he obtained was not a region or country it was from an event that took place. It's also hard to believe that death data could be accurately collected from the Summer Games because many people likely traveled to get to the games meaning that several deaths were likely unrecorded. 
 
-#### Objective 4.2
-
-```{r ob4.2}
-
-```
 
 ### GitHub Log
 
