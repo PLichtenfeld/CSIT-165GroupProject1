@@ -111,8 +111,8 @@ time_series_covid19_confirmed_global <- ("time_series_covid19_confirmed_global.c
 for(i in 1:nrow(confirmedData)){
     #calculates the confirmations on the first day of the current row
   first_confirmed = (confirmedData[i,INDEXOFFIRSTDAY])
-   if(first_confirmed = )){
-
+   if(first_confirmed =  (confirmedData[i,INDEXOFFIRSTDAY])){
+print(first_confirmed)
 ```
 
 ### Objective 3
