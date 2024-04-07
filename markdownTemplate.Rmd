@@ -108,10 +108,15 @@ The most recent area to have a first confirmed case
 #stores the urls of the one data set used in this objective 
 time_series_covid19_confirmed_global <- ("time_series_covid19_confirmed_global.csv")
 #for loop goes through every row of the data set of confirmed global cases of COVID 19
+for(i in 1:nrow(confirmedData)){
+    #calculates the confirmations on the first day of the current row
+  first_confirmed = (confirmedData[i,INDEXOFFIRSTDAY])
+   if(first_confirmed = )){
+
 ```
 
 ### Objective 3
-The areas from objective 2 from where the first confirmed case(s) occurred are __ miles away.
+The areas from objective 2 from where the first confirmed case occurred are soso miles away.
 ```{r ob3}
 ```
 
