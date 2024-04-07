@@ -113,7 +113,6 @@ time_series_covid19_confirmed_global <- ("time_series_covid19_confirmed_global.c
 ### Objective 3
 The areas from objective 2 from where the first confirmed case(s) occurred are __ miles away.
 ```{r ob3}
-distm()
 ```
 
 ### Objective 4
