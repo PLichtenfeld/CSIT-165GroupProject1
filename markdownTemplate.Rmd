@@ -105,14 +105,32 @@ print(confirmedData[largestIndex,2])
 The most recent area to have a first confirmed case
 ```{r ob2}
 #What if we wanted to find the most recent area to have a first confirmed COVID 19 case?
-#stores the urls of the one data set used in this objective 
+#stores the urls of the two data sets used in this objective 
 time_series_covid19_confirmed_global <- ("time_series_covid19_confirmed_global.csv")
-#for loop goes through every row of the data set of confirmed global cases of COVID 19
+time_series_covid19_deaths_global <- ("time_series_covid19_deaths_global.csv")
+confirmedData <- read.csv(file=time_series_covid19_confirmed_global, header = TRUE)
+indexOfMostRecentCountry <- 0
+indexOfMostRecentDate <- 0
+recentConfirmedCase <- 0
+recentCountry <- 0
 for(i in 1:nrow(confirmedData)){
-    #calculates the confirmations on the first day of the current row
-  first_confirmed = (confirmedData[i,INDEXOFFIRSTDAY])
-   if(first_confirmed =  (confirmedData[i,INDEXOFFIRSTDAY])){
-print(first_confirmed)
+  for (y in 1:ncol(confirmedData)+6) {
+    
+    if(isTRUE(confirmedData[i,5+y]==0&&confirmedData[i,5+y+1] > 0)){
+    indexOfMostRecentCountry <- i
+    indexOfMostRecentDate <- 5+y+1
+    #print(confirmedData[i, 5+y+1])  
+      
+    }
+    if(indexOfMostRecentDate > recentConfirmedCase){
+      recentConfirmedCase <- indexOfMostRecentDate
+      recentCountry <- indexOfMostRecentCountry
+      
+    }
+  }
+#  print(confirmedData[i,2])
+}
+print(confirmedData[recentCountry,1:2ins])
 ```
 
 ### Objective 3
