@@ -64,7 +64,7 @@ Date fields are stored in MM/DD/YYYY format.
 ## Project Objectives
 
 ### Objective 1
-
+It appears that COVID-19 originated from Hubei, China. 
 ```{r ob1}
 #stores the urls of the two data sets used in this objective 
 time_series_covid19_confirmed_global <- ("time_series_covid19_confirmed_global.csv")
@@ -74,7 +74,7 @@ confirmedData <- read.csv(file=time_series_covid19_confirmed_global, header = TR
 deathData <- read.csv(file=time_series_covid19_deaths_global, header = TRUE)
 #largest index stores the index of the country with the most deaths and confirmations on the first recorded day 
 largestIndex <- 1
-#scores the largest number of deaths and confirmations on the first day 
+#stores the largest number of deaths and confirmations on the first day 
 largestNumber <- 0
 #Stores the current sum total of deaths and confirmations as we loop through the data sets. 
 currentSum <- 0
@@ -97,45 +97,63 @@ for(i in 1:nrow(confirmedData)){
   currentSum = 0
 
 }
-print(confirmedData[largestIndex,2])
+print(confirmedData[largestIndex,1:2])
 
 ```
 
 ### Objective 2
-The most recent area to have a first confirmed case
+The most recent area to have a first confirmed case is Pitcairn Islands,United Kingdom. 
 ```{r ob2}
 #What if we wanted to find the most recent area to have a first confirmed COVID 19 case?
-#stores the urls of the two data sets used in this objective 
+#stores the url of the one data set used in this objective 
 time_series_covid19_confirmed_global <- ("time_series_covid19_confirmed_global.csv")
-time_series_covid19_deaths_global <- ("time_series_covid19_deaths_global.csv")
+#reads the one url into variables and that csv is stored as data frame
 confirmedData <- read.csv(file=time_series_covid19_confirmed_global, header = TRUE)
+#stores the index of country with the most recent COVID 19 case in the data set 
 indexOfMostRecentCountry <- 0
+#stores the index of the most recent date of a COVID 19 case
 indexOfMostRecentDate <- 0
+#stores the most recent confirmed case of COVID 19
 recentConfirmedCase <- 0
+#stores the recent confirmed country with a COVID 19 case 
 recentCountry <- 0
+#for loop goes through every row of the data set
 for(i in 1:nrow(confirmedData)){
+#for loop goes through every column of the data set
   for (y in 1:ncol(confirmedData)+6) {
-    
+    #checks if it is TRUE that instane in column 5 is greater than 0
     if(isTRUE(confirmedData[i,5+y]==0&&confirmedData[i,5+y+1] > 0)){
+    #sets the index of country with the most recent COVID 19 case in the data set 
     indexOfMostRecentCountry <- i
+    #sets the index of the most recent date
     indexOfMostRecentDate <- 5+y+1
     #print(confirmedData[i, 5+y+1])  
       
     }
+    #checks if index of the most recent date is greater than the recent confirmed case
     if(indexOfMostRecentDate > recentConfirmedCase){
+      #sets the recent confirmed case as the index of the recent date
       recentConfirmedCase <- indexOfMostRecentDate
+      #sets recent country as index of country with the most recent COVID 19 case
       recentCountry <- indexOfMostRecentCountry
       
     }
   }
 #  print(confirmedData[i,2])
 }
-print(confirmedData[recentCountry,1:2ins])
+print(confirmedData[recentCountry,1:2])
 ```
 
 ### Objective 3
-The areas from objective 2 from where the first confirmed case occurred are soso miles away.
+Pitcairn Islands is 8746.97688455398 away from Hubei,China
 ```{r ob3}
+#calculate the distance between two coordinates in meters 
+distanceInMeters <- geosphere::distm (c(confirmedData[recentCountry,4],confirmedData[recentCountry,3]), c(confirmedData[largestIndex,4],confirmedData[largestIndex,3]), fun = distGeo)
+
+#convert the distance in meters to miles
+distanceInMiles <- distanceInMeters/1609.344
+print(distanceInMiles)
+paste(confirmedData[recentCountry,1], "is", distanceInMiles, "away from", confirmedData[largestIndex,1], ",", confirmedData[largestIndex,2])
 ```
 
 ### Objective 4
