@@ -121,11 +121,11 @@ recentCountry <- 0
 for(i in 1:nrow(confirmedData)){
 #for loop goes through every column of the data set
   for (y in 1:ncol(confirmedData)+6) {
-    #checks if it is TRUE that instane in column 5 is greater than 0
+    #checks if it is TRUE that column 5 is greater than 0
     if(isTRUE(confirmedData[i,5+y]==0&&confirmedData[i,5+y+1] > 0)){
     #sets the index of country with the most recent COVID 19 case in the data set 
     indexOfMostRecentCountry <- i
-    #sets the index of the most recent date
+    #sets the index of the most recent date as the 5th column
     indexOfMostRecentDate <- 5+y+1
     #print(confirmedData[i, 5+y+1])  
       
@@ -145,7 +145,7 @@ print(confirmedData[recentCountry,1:2])
 ```
 
 ### Objective 3
-Pitcairn Islands is 8746.97688455398 away from Hubei,China
+Pitcairn Islands is 8746.97688455398 away from Hubei,China.
 ```{r ob3}
 #calculate the distance between two coordinates in meters 
 distanceInMeters <- geosphere::distm (c(confirmedData[recentCountry,4],confirmedData[recentCountry,3]), c(confirmedData[largestIndex,4],confirmedData[largestIndex,3]), fun = distGeo)
@@ -153,7 +153,10 @@ distanceInMeters <- geosphere::distm (c(confirmedData[recentCountry,4],confirmed
 #convert the distance in meters to miles
 distanceInMiles <- distanceInMeters/1609.344
 print(distanceInMiles)
-paste(confirmedData[recentCountry,1], "is", distanceInMiles, "away from", confirmedData[largestIndex,1], ",", confirmedData[largestIndex,2])
+#stores the distance between areas from objective 2 and where the first confirmed case(s) occurred
+howFarAway<- paste(confirmedData[recentCountry,1], "is", distanceInMiles, "away from", confirmedData[largestIndex,1], ",", confirmedData[largestIndex,2])
+#print the statement "Pitcairn Islands is 8746.97688455398 away from Hubei , China"
+print(howFarAway)
 ```
 
 ### Objective 4
