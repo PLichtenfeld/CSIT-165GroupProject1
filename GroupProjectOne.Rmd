@@ -34,9 +34,6 @@ install_me <- packages[!(packages %in% installed.packages()[, "Package"])]
 if (length(install_me)) install.packages(install_me)
 
 library(knitr)
-library(kableExtra)
-library(magrittr)
-library(readr)
 library(geosphere)
 ```
 
