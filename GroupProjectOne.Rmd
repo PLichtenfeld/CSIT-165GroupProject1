@@ -2,10 +2,7 @@
 title: "Project 1"
 author: "Name: Paul Lichtenfeld  \n Partner: Jenna Teresa Smith \nPartner: Edward Torres "
 date: "`r Sys.Date()`"
-output: 
-  pdf_document:
-    toc: true
-    toc_depth: 3
+output: html_document
 header-includes:
   - \usepackage{booktabs}
   - \usepackage{longtable}
@@ -129,7 +126,7 @@ for(i in 1:nrow(confirmedData)){
     indexOfMostRecentCountry <- i
     #sets the index of the most recent date as the 5th column
     indexOfMostRecentDate <- 5+y+1
-    #print(confirmedData[i, 5+y+1])  
+    
       
     }
     #checks if index of the most recent date is greater than the recent confirmed case
@@ -141,7 +138,7 @@ for(i in 1:nrow(confirmedData)){
       
     }
   }
-#  print(confirmedData[i,2])
+
 }
 print(confirmedData[recentCountry,1:2])
 ```
@@ -250,8 +247,4 @@ paste("The area with the lowest risk score is:" , riskScoreTable[indexOfLowestRi
 The current region with the lowest risk score is the Summer Olympic games of 2020 with a 0 and the current highest risk score is North Korea with a value of 600. These scores are important to calculate because they represent how different areas are equipped to deal with COVID-19. Which countries are struggling, which are doing well. The difference in scores can have to do with how equipped different nations are at handling pandemics. It also shows how effective different medical and lockdown procedures affect risk scores as time goes on. These risk scores do have several flaws however. The biggest one being that incomplete or impossible data skews the results an insane amount. For example North Korea has a risk score that should not be physically possible. Also the lowest risk score that he obtained was not a region or country it was from an event that took place. It's also hard to believe that death data could be accurately collected from the Summer Games because many people likely traveled to get to the games meaning that several deaths were likely unrecorded. 
 
 
-### GitHub Log
 
-```{bash gitlog}
-git log --pretty=format:"%nSubject: %s%nAuthor: %aN%nDate: %aD%nBody: %b"
-```
