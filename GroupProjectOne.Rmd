@@ -1,6 +1,6 @@
 ---
 title: "Project 1"
-author: "Name: Paul Lichtenfeld  \n Partner: Jenna Teresa Smith \nPartner: Edward Torres "
+author: "Name: Paul Lichtenfeld  \n Partners: Jenna Teresa Smith, Edward Torres"
 date: "`r Sys.Date()`"
 output: html_document
 header-includes:
